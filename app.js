@@ -1,6 +1,7 @@
 const path = require('path');
 
 const express = require('express');
+
 const bodyParser = require('body-parser');
 
 
@@ -17,7 +18,8 @@ app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const userRoutes =require('./routes/user')
+const userRoutes =require('./routes/user');
+const expenseroutes=require('./routes/expense');
 
 var cors=require('cors');
 const { JSON } = require('sequelize');
@@ -25,6 +27,13 @@ const { JSON } = require('sequelize');
 app.use(cors());
 app.use(bodyParser.json({ extended: false }));
 
+app.use('/expense',expenseroutes)
+
+
+
+ 
+    
+ 
 
 app.use('/user',userRoutes);
 

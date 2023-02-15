@@ -10,3 +10,5 @@ router.post('/add-user',userController.addUsers);
 router.get('/get-users',userController.getAllUsers);
 
 router.delete('/delete-user/:id',userController.deleteUser);
+
+module.exports=router;
