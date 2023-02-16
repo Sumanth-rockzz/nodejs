@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 
 const Puser=require('./models/puser');
 const Product=require('./models/product');
+const Cart=require('./models/cart');
+const CartItem=require('./models/cart-item');
 
 const errorController = require('./controllers/error');
 
@@ -44,6 +46,7 @@ app.use((req,res,next)=>{
     .catch(err=>console.log(err));
 })
 
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -53,9 +56,15 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 Product.belongsTo(Puser,{constraints:true,onDelete:'CASCADE'});
- Puser.hasMany(Product); //it can alse be defined like this
+Puser.hasMany(Product); //it can alse be defined like this
+Puser.hasOne(Cart);
+Cart.belongsTo(Puser);
+Cart.belongsToMany(Product,{through:CartItem});
+Product.belongsToMany(Cart,{through:CartItem});
 
-sequelize.sync()
+
+
+sequelize.sync( /* {force:true} */)
 .then((res)=>{
    return  Puser.findByPk(1);
     //console.log(res);
@@ -68,7 +77,9 @@ sequelize.sync()
     return user;
 })
 .then(user=>{
-    console.log(user);
+return user.createCart();
+})
+.then(cart=>{
     app.listen(3000);
 })
 .catch((err)=>{
